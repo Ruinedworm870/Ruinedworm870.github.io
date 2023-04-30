@@ -65,61 +65,57 @@
       </p>
 
       <h2>Run the Program I Made</h2>
-      <p>Alternatively to creating your own program, I made one that will hanlde sending requests based on user input into the console and will output the results of requested files to a file on the users system. The 
+      <p>Alternatively to creating your own program, I made one that will handle sending requests based on user input into the console and will output the results of requested files to a file on the users system. The 
         requirements to run this programs are that you need Python installed with the requests library by running "pip install requests" once you have python installed. You can then use an IDE of your choice to run the program:
       </p>
       <pre><code>
 import requests
 
 def send_request(route):
-#The "Code" is there for a sort of authentication that I put into the API, it checks to make sure it matches 
-#with the code in the API and if it doesn't it will abort with error code 401.
-#It also prevents the contents from being displayed in the browser.
-return requests.get('http://www.williamsmolinskijr.com/api/' + route, params={"Code": "IWantToKnowMore"})
+    #The "Code" is there for a sort of authentication that I put into the API, it checks to make sure it matches with the code in the API and if it doesn't it will abort with error code 401.
+    #It also prevents the contents from being displayed in the browser.
+    return requests.get('http://www.williamsmolinskijr.com/api/' + route, params={"Code": "IWantToKnowMore"})
 
 #Handles creating the output file
 def output(content, fileName):
-outputFileName = fileName
-outputFile = open(outputFileName, "w+")
-outputFile.write(content)
-outputFile.close()
+    outputFileName = fileName
+    outputFile = open(outputFileName, "w+")
+    outputFile.write(content)
+    outputFile.close()
 
 #Determines if the request was successful or not
 def valid_response(response):
-if response.status_code == 200:
-    return True
-else:
-    return False
+    if response.status_code == 200:
+        return True
+    else:
+        return False
 
 if __name__ == '__main__':
-#Sends the initial request to the api for the options menu which will display all of the files available to be requested
-response = send_request("options")
-
-if valid_response(response):
-    #The response was valid and the program now asks for which file the user wants to receive
-    print("Enter e to exit")
-    option = input(response.text)
+    #Sends the initial request to the api for the options menu which will display all of the files available to be requested
+    response = send_request("options")
     
-    #Loops until e is entered which will stop the program
-    while option != 'e':
+    if valid_response(response):
+        #The response was valid and the program now asks for which file the user wants to receive
+        print("Enter e to exit")
+        option = input(response.text)
         
-        #Sends a request to the api for the file that the user entered the name of
-        if option.lower() != "resume.html":
-            response = send_request("options/" + option)
-        else:
-            response = send_request("resume")
+        #Loops until e is entered which will stop the program
+        while option != 'e':
             
-        if valid_response(response):
-            #The request was a success and a file will be created with the contents of the file on the users device
-            output(response.text, "WilliamSmolinskiJr" + option)
-            print("SUCCESS\n")
-        else:
-            print(response)
-            print("FAILURE, Did you type the name wrong?\n")
-        
-        option = input("Would you like another? (e to exit):")
-else:
-    print(response)
+            #Sends a request to the api for the file that the user requested
+            response = send_request("options/" + option)
+                
+            if valid_response(response):
+                #The request was a success and a file will be created with the contents of the file on the users device
+                output(response.text, "WilliamSmolinskiJr" + option)
+                print("SUCCESS\n")
+            else:
+                print(response)
+                print("FAILURE, Did you type the name wrong?\n")
+            
+            option = input("Would you like another? (e to exit):")
+    else:
+        print(response)
               </code></pre>
     </div>
   </body>
