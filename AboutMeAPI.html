@@ -72,7 +72,8 @@
 import requests
 
 def send_request(route):
-    #The "Code" is there for a sort of authentication that I put into the API, it checks to make sure it matches with the code in the API and if it doesn't it will abort with error code 401.
+    #The "Code" is there for a sort of authentication that I put into the API, it checks to make sure it 
+    #matches with the code in the API and if it doesn't it will abort with error code 401.
     #It also prevents the contents from being displayed in the browser.
     return requests.get('http://www.williamsmolinskijr.com/api/' + route, params={"Code": "IWantToKnowMore"})
 
